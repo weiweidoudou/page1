@@ -1,28 +1,60 @@
 $(function(){
+	var wid=parseInt($('.banner').css('width'));
+	var $lists=$('.banner .lists');
+	var len=$('.banner .lists li').length;
+	$lists.css('width',len*wid+'px');
+	$ins=$('.banner .ins');
+	$ins.css('width',len*wid+'px');
+	$('.pre').click(function(){
+		if(!$lists.is(':animated')){
+			if(parseInt($lists.css('left'))=='-'+wid){
+				$ins.css('left',-(len-1)*wid+'px');
+				$lists.animate({left:'+='+wid},'slow',function(){
+					$lists.css('left',-(len-1)*wid+'px');
+				});
+			}else if(parseInt($lists.css('left'))==0){
+				$lists.css('left',-(len-1)*wid+'px');
+				$ins.css('left',-wid*(len-2)+'px');
+				$lists.animate({left:'+='+wid},'slow');
+			}
+			else{
+				$ins.css('left','+='+wid);
+				$lists.animate({left:'+='+wid},'slow');
+			}
+		}
+	})
 
-	var count=$('.banner li').length;
-    $('.banner ul').css({width:count*250});    
-     
-     //点击pre按钮时图片向右滑动
-    $('.pre').click(function(){
-        var g = parseInt($('.banner ul').css('left'));                
-            if(g!=0 && count > 1){                        
-                 
-                $('.banner>ul:not(:animated)').animate({left:g+250},200);
-            }                
-                 
-    });
-     //点击next按钮时图片向左滑动
-    $('.next').click(function(){                                            
-        var g = parseInt($('.banner ul').css('left'));
-                     
-            var a=-(count-1)*250;
-            var ga=parseInt($('.banner ul').css('left'));
-            if(a<ga){            
-                $('.banner>ul:not(:animated)').animate({left:g-250},200);
-            }        
-                     
-    });    
-                 
-     
+	$('.next').click(function(){
+		if(!$lists.is(':animated')){
+			if(parseInt($lists.css('left'))==-(len-2)*wid){
+				$ins.css('left','0px');
+				$lists.animate({left:'-='+wid},'slow',function(){
+					$lists.css('left','0px');
+				});
+			}else if(parseInt($lists.css('left'))==-(len-1)*wid){
+				$lists.css('left','0');
+				$ins.css('left','-'+wid+'px');
+				$lists.animate({left:'-='+wid},'slow');
+			}
+			else{
+				$ins.css('left','-='+wid);
+				$lists.animate({left:'-='+wid},'slow');
+			}
+		}
+	})
+
+	$('.banner').mouseover(function(){
+		clearInterval(timer);
+		$('.banner button').show()
+	}).mouseout(function(){
+		timer=setInterval(function(){
+					$('.next').click()
+				},3000)
+		$('.banner button').hide()
+	})
+
+
+	var timer=setInterval(function(){
+				$('.next').click()
+			},3000);
 })
